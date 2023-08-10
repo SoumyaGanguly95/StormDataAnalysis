@@ -1,0 +1,74 @@
+---
+title: "storm-data-analysis-vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{storm-data-analysis-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+### Introduction
+
+<p style="text-align:center;">
+  The StormDataAnalysis package provides tools for loading, cleaning, and analyzing storm data. This vignette demonstrates the main functionalities of the package using a sample storm dataset located in the inst folder.
+</p>
+
+
+```{r setup}
+install.packages("StormDataAnalysis")
+library(StormDataAnalysis)
+```
+
+### Load and Clean Storm Dataset
+
+To begin, let's load and clean the storm dataset using the load_and_clean_storm_data function:
+
+
+```{r "Load and Clean Storm Dataset", include=FALSE}
+cleaned_storm_data <- load_and_clean_storm_data(file_name = "storms_2020.csv")
+
+```
+
+### Display Column Summary
+
+Next, we can visualize the summary of columns and their data types in the loaded dataset using the display_column_summary function:
+
+
+```{r "Display Column Summary", include=FALSE}
+display_column_summary(cleaned_storm_data)
+
+```
+
+
+### Feature Engineering
+
+We'll now add new columns to the dataset using the add_new_feature function defined in the data_feature_engineering.R script:
+
+```{r "Feature Engineering", include=FALSE}
+storm_data_with_features <- add_new_feature(cleaned_storm_data)
+
+```
+
+### Exploratory Data Analysis
+
+With the enriched dataset, we can perform exploratory data analysis using the explore_storm_data function:
+
+
+```{r "Exploratory Data Analysis", include=FALSE}
+eda_results <- explore_storm_data(storm_data_with_features)
+eda_results$storm_counts
+eda_results$duration_comparison
+eda_results$event_type_counts
+
+```
+
+### Conclusion
+
+In this vignette, we demonstrated how to use the StormDataAnalysis package to load, clean, and analyze storm data. This package provides convenient functions for data manipulation and exploration, enabling researchers and data analysts to gain insights from storm datasets.
