@@ -2,7 +2,9 @@
 
 export(add_new_feature)
 export(clean_data)
+export(display_column_summary)
 export(load_csv_from_package)
+export(merge_cleaned_datasets)
 importFrom(dplyr,"%>%")
 importFrom(dplyr,count)
 importFrom(dplyr,distinct)

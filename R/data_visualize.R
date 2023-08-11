@@ -9,6 +9,7 @@
 #' \dontrun{
 #' display_column_summary(cleaned_storm_data)
 #' }
+#' @export
 display_column_summary <- function(df) {
   cat("Column Summary:\n")
   cat("----------------\n")
