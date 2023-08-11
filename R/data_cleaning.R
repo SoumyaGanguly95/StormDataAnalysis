@@ -14,12 +14,25 @@
 #' }
 #'
 #' @export
-#' @importFrom dplyr filter_all all_vars distinct
+#' @importFrom dplyr distinct if_any everything
 #' @usage clean_data(data)
 clean_data <- function(data) {
-  # Remove rows with missing values
-  cleaned_data <- dplyr::filter_all(data, all_vars(function(x) !is.na(x)))
+  if (!requireNamespace("dplyr", quietly = TRUE)) {
+    stop("dplyr package is required but not installed.")
+  }
 
+  # Define a custom function to check for non-missing and non-NA values in numeric or logical columns
+  not_missing <- function(x) {
+    if (is.numeric(x) || is.logical(x)) {
+      !is.na(x)
+    } else {
+      TRUE
+    }
+  }
+
+  # Remove rows with missing values in numeric or logical columns
+  cleaned_data <- data %>%
+    dplyr::filter(if_any(everything(), not_missing))
 
   # Remove duplicate rows
   cleaned_data <- dplyr::distinct(cleaned_data)
