@@ -14,6 +14,8 @@
 #' eda_results <- explore_storm_data(cleaned_storm_data)
 #' print(eda_results)
 #' }
+#' @importFrom dplyr %>%
+#' @importFrom dplyr count summarize
 explore_storm_data <- function(storm_data) {
   # Initialize the variable
   mean_duration_of_storm <- NULL

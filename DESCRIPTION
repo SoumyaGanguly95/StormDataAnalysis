@@ -12,7 +12,3 @@ RoxygenNote: 7.2.3
 Imports:
   dplyr,
   utils
-Suggests: 
-    knitr,
-    rmarkdown
-VignetteBuilder: knitr
