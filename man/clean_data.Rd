@@ -2,24 +2,28 @@
 % Please edit documentation in R/data_cleaning.R
 \name{clean_data}
 \alias{clean_data}
-\title{Clean Data}
+\title{Clean Data Function}
 \usage{
 clean_data(data)
 }
 \arguments{
-\item{data}{A data frame containing the data to be cleaned.}
+\item{data}{A data frame containing the input data.}
 }
 \value{
-A data frame with missing values and duplicate rows removed.
+A cleaned data frame.
 }
 \description{
-This function removes rows with missing values and duplicate rows from a data frame.
+This function cleans the input data by checking specified columns for valid entries,
+filtering rows with valid entries if they are more than 50\% of the total entries,
+and removing duplicate rows.
 }
 \examples{
-\dontrun{
-library(dplyr)
-cleaned_data <- clean_data(loaded_data)
-head(cleaned_data)
-}
+data_to_clean <- data.frame(
+  tor_f_scale = c(1, 2, NA, 4),
+  tor_length = c(3.4, 5.2, 2.8, NA),
+  tor_width = c(0.8, NA, 1.1, 2.0),
+  tor_other_wfo = c("A", "B", "C", "A")
+)
+cleaned_data <- clean_data(data_to_clean)
 
 }

@@ -2,16 +2,18 @@
 #'
 #' This function adds categorical and numerical columns 'magnitude_type' and 'storm_duration'
 #' to the storm dataset based on the values in the 'magnitude' column and the difference between
-#' 'event_begin_time' and 'event_end_time'.
+#' 'event_begin_time' and 'event_end_time'. It also drops rows where 'magnitude_type' is NA.
 #'
 #' @param data A data frame containing the storm dataset.
-#' @return The input data frame with the new columns added.
+#' @return The input data frame with the new columns added and rows with NA 'magnitude_type' dropped.
+#'
 #' @examples
 #' \dontrun{
 #' storm_data <- load_and_clean_storm_data()
 #' storm_data <- add_new_feature(storm_data)
 #' head(storm_data)
 #' }
+#'
 #' @export
 add_new_feature <- function(data) {
   # Create a categorical column 'magnitude_type' based on 'magnitude' values
@@ -27,6 +29,9 @@ add_new_feature <- function(data) {
   data$event_begin_time <- as.POSIXct(data$event_begin_time, format = "%Y-%m-%d %H:%M:%S")
   data$event_end_time <- as.POSIXct(data$event_end_time, format = "%Y-%m-%d %H:%M:%S")
   data$storm_duration <- difftime(data$event_end_time, data$event_begin_time, units = "mins")
+
+  # Drop rows where 'magnitude_type' is NA
+  data <- data[!is.na(data$magnitude_type), ]
 
   return(data)
 }

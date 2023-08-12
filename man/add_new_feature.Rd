@@ -10,12 +10,12 @@ add_new_feature(data)
 \item{data}{A data frame containing the storm dataset.}
 }
 \value{
-The input data frame with the new columns added.
+The input data frame with the new columns added and rows with NA 'magnitude_type' dropped.
 }
 \description{
 This function adds categorical and numerical columns 'magnitude_type' and 'storm_duration'
 to the storm dataset based on the values in the 'magnitude' column and the difference between
-'event_begin_time' and 'event_end_time'.
+'event_begin_time' and 'event_end_time'. It also drops rows where 'magnitude_type' is NA.
 }
 \examples{
 \dontrun{
@@ -23,4 +23,5 @@ storm_data <- load_and_clean_storm_data()
 storm_data <- add_new_feature(storm_data)
 head(storm_data)
 }
+
 }
