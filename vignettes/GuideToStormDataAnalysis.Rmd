@@ -27,6 +27,8 @@ The following R package, StormDataAnalysis is a Data Analysis package which is b
 3. Storm data analysis contributes to climate research by providing insights into changing weather patterns, frequency, and intensity of storms. This information is vital for understanding climate change impacts and making informed decisions regarding mitigation and adaptation strategies.
 
 
+The capabilities offered in this package can definitely be fulfilled with other standard R packages. But the following package is motivated to deal specifically with Storm Dataset and fused Storm Datasets. Additionally, related weather or air pollution data can be combined with the results obtained to make suitable data-driven decisions in the field of Environmental Study, Meteorology or Geo-Spatial Data Analysis and Predictions.
+
 ### Data Description
 
 The Storm Events Database is an integrated database of severe weather events across the United States , with information about a storm event's location, azimuth, distance, impact, and severity, including the cost of damages to property and crops. 
@@ -55,6 +57,7 @@ Loading required package: usethis
 
 ```{r setup}
 library(StormDataAnalysis)
+
 ```
 
 ### Load Storm Dataset
@@ -68,7 +71,6 @@ loaded_data <- load_csv_from_package(file_name = data_file)
 
 # Display the first few rows of the loaded data
 head(loaded_data)
-
 
 ```
 
@@ -90,12 +92,13 @@ display_column_summary(cleaned_storm_data)
 
 ### Feature Engineering
 
-We'll now add new columns to the dataset using the add_new_feature function defined in the data_feature_engineering.R script:
+We will now add new columns to the dataset using the add_new_feature function defined in the data_feature_engineering.R script:
 
 ```{r}
 
 enhanced_storm_data <- add_new_feature(cleaned_storm_data)
 head(enhanced_storm_data)
+
 ```
 
 ### Exploratory Data Analysis
@@ -106,6 +109,7 @@ With the enriched dataset, we can perform exploratory data analysis using the ex
 
 eda_results <- explore_storm_data(enhanced_storm_data)
 print(eda_results)
+
 ```
 
 ### Analyzing Results
@@ -124,7 +128,6 @@ bar_plot_counts <- ggplot(eda_results$storm_counts, aes(x = magnitude_type, y = 
   labs(title = "Storm Counts by Category", x = "Magnitude Type", y = "Count")
 print(bar_plot_counts)
 
-
 ```
 
 ```{R}
@@ -139,8 +142,6 @@ box_plot_durations <- ggplot(filtered_storm_data, aes(x = magnitude_type, y = st
   geom_boxplot() +
   labs(title = "Storm Durations by Category", x = "Magnitude Type", y = "Storm Duration")
 print(box_plot_durations)
-
-
 
 ```
 
@@ -180,3 +181,43 @@ Overall, these visualizations offer a preliminary understanding of storm pattern
 
 The dataset can be combined with other data sets to measure correlations between increased severity of storms and related parameters to measure air pollution. The pollution parameters selected can be an increase in Air Pollution or rising carbon emissions for instance.
 
+
+#### Issues with R CMD check:
+
+I have received 3 notes on executing R CMD check.
+
+```
+❯ checking installed package size ... NOTE
+    installed size is 67.4Mb
+```
+I believe the package size is less than 80 MB along with the datasets. 
+So there is not an urgent requirement for package size optimization.
+
+```
+❯ checking dependencies in R code ... NOTE
+  Namespace in Imports field not imported from: 'ggplot2'
+    All declared Imports should be used.
+```
+I am using ggplot2 for obtaining plot visualizations in my vignette.
+Although, it is not used while writing the functions in my package, but importing the package makes it more convenient, and I do not need to import the package while executing my vignette.
+
+```
+❯ checking R code for possible problems ... NOTE
+  clean_data: no visible binding for global variable 'tor_f_scale'
+  clean_data: no visible binding for global variable 'tor_length'
+  clean_data: no visible binding for global variable 'tor_width'
+  clean_data: no visible binding for global variable 'tor_other_wfo'
+  explore_storm_data: no visible binding for global variable
+    'magnitude_type'
+  explore_storm_data: no visible binding for global variable
+    'storm_duration'
+  explore_storm_data: no visible binding for global variable 'event_type'
+  explore_storm_data: no visible binding for global variable
+    'mean_duration_of_storm'
+  Undefined global functions or variables:
+    event_type magnitude_type mean_duration_of_storm storm_duration
+    tor_f_scale tor_length tor_other_wfo tor_width
+```
+All the following above are names of columns in a dataframe. But since I am using the dplyr library, it is not mandatory to reference them with a '$' operator.
+
+For example, I can write `data$magnitude_type`; and this Note will be removed in the next CMD check. But at times, my code is giving unexpected output. It seems to be a problem with roxygen.
