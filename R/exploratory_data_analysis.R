@@ -18,6 +18,7 @@
 #'
 #' @importFrom dplyr %>%
 #' @importFrom dplyr count summarize
+#' @export
 explore_storm_data <- function(storm_data) {
   # Calculate storm counts by category
   storm_counts <- dplyr::count(storm_data, magnitude_type)

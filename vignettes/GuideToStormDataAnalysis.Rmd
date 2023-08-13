@@ -1,0 +1,178 @@
+---
+title: "GuideToStormDataAnalysis"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{GuideToStormDataAnalysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+### Introduction
+The following R package, StormDataAnalysis is a Data Analysis package which is built to work with Storm Datasets.  
+
+### Motivation
+1. Studying storm patterns and characteristics can help communities and organizations better prepare for and respond to severe weather events. By understanding historical data, trends, and intensities, it becomes possible to develop more effective disaster preparedness plans.
+
+2. Analyzing storm data aids in assessing risks associated with various storm types. Businesses, insurance companies, and government agencies can use this information to make more accurate risk assessments, set insurance rates, and allocate resources for emergency response.
+
+3. Storm data analysis contributes to climate research by providing insights into changing weather patterns, frequency, and intensity of storms. This information is vital for understanding climate change impacts and making informed decisions regarding mitigation and adaptation strategies.
+
+
+### Data Description
+
+The Storm Events Database is an integrated database of severe weather events across the United States , with information about a storm event's location, azimuth, distance, impact, and severity, including the cost of damages to property and crops. 
+
+It contains data documenting:
+- The occurrence of storms and other significant weather phenomena having sufficient intensity to cause loss of life, injuries, significant property damage, and/or disruption to commerce.
+
+- Rare, unusual, weather phenomena that generate media attention, such as snow flurries in South Florida or the San Diego coastal area.
+
+- Other significant meteorological events, such as record maximum or minimum temperatures or precipitation that occur in connection with another event.
+
+
+### Exploration
+
+To start using the package, install and load library devtools. Next execute the load_all()function to load the package StormDataAnalysis.
+In your R console type;
+
+```
+library(devtools)
+> library(devtools)
+Loading required package: usethis
+> load_all()
+ℹ Loading StormDataAnalysis
+
+```
+
+```{r setup}
+library(StormDataAnalysis)
+```
+
+### Load Storm Dataset
+
+To begin, let's load the storm dataset using the load_csv_from_package function:
+
+```{r}
+# Load CSV data using the custom function
+data_file <- "Storms_2020.csv"  # Change this to the actual CSV file name
+loaded_data <- load_csv_from_package(file_name = data_file)
+
+# Display the first few rows of the loaded data
+head(loaded_data)
+
+
+```
+
+
+### Data Cleaning and Display Column Summary
+
+Firstly, we perform a data cleaning process. Ideally a raw dataset contains multiple columns with missing values and 
+
+
+Next, we can visualize the summary of columns and their data types in the loaded data set using the display_column_summary function:
+
+The 
+
+```{r}
+cleaned_storm_data <- clean_data(loaded_data)
+display_column_summary(cleaned_storm_data)
+
+```
+
+### Feature Engineering
+
+We'll now add new columns to the dataset using the add_new_feature function defined in the data_feature_engineering.R script:
+
+```{r}
+
+enhanced_storm_data <- add_new_feature(cleaned_storm_data)
+head(enhanced_storm_data)
+```
+
+### Exploratory Data Analysis
+
+With the enriched dataset, we can perform exploratory data analysis using the explore_storm_data function:
+
+```{r}
+
+eda_results <- explore_storm_data(enhanced_storm_data)
+print(eda_results)
+```
+
+### Analyzing Results
+
+To analyze the results obtained from Exploratory Data Analysis stage, let us plot the results. Visualizing the data analysis with graphs and plots helps in drawing valuable insights from the data. 
+
+```{R}
+# Import necessary packages
+library(ggplot2)
+
+# Bar Plot of Storm Counts by Category
+bar_plot_counts <- ggplot(eda_results$storm_counts, aes(x = magnitude_type, y = n)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Storm Counts by Category", x = "Magnitude Type", y = "Count")
+print(bar_plot_counts)
+
+
+```
+
+```{R}
+# Filter out rows with non-numeric or missing storm_duration values
+filtered_storm_data <- enhanced_storm_data[!is.na(enhanced_storm_data$storm_duration), ]
+
+# Convert storm_duration to numeric
+filtered_storm_data$storm_duration_numeric <- as.numeric(filtered_storm_data$storm_duration)
+
+# Box Plot of Storm Durations by Category
+box_plot_durations <- ggplot(filtered_storm_data, aes(x = magnitude_type, y = storm_duration_numeric)) +
+  geom_boxplot() +
+  labs(title = "Storm Durations by Category", x = "Magnitude Type", y = "Storm Duration")
+print(box_plot_durations)
+
+
+
+```
+
+
+```{R}
+# Bar Plot of Event Type Counts
+bar_plot_event_types <- ggplot(eda_results$event_type_counts, aes(x = event_type, y = n)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Event Type Counts", x = "Event Type", y = "Count") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+print(bar_plot_event_types)
+
+```
+
+
+### Conclusion
+
+The plots provide valuable insights to EDA results.
+
+- Storm Counts by Category: The bar plot displaying storm counts by category provides an insight into the distribution of storms across different magnitude types. This information can help in understanding which categories of storms are more common or prevalent in the dataset.
+
+- Storm Durations by Category: The box plot illustrating storm durations by category gives an understanding of how the duration of storms varies among different magnitude types. This visualization helps in identifying potential trends or differences in storm durations for various storm categories.
+
+- Event Type Counts: The bar plot showing event type counts gives an overview of the frequency of different types of events recorded. This can help in identifying which types of events are more frequent and might have a significant impact on the analysis.
+
+- Based on these visualizations, you can make the following observations or conclusions:
+
+- Certain storm categories might be more common or prevalent compared to others, indicating potential areas of focus for disaster preparedness and response.
+
+- Variability in storm durations among different magnitude types could imply that certain categories of storms tend to be more prolonged, which might have different implications for their impact.
+
+The distribution of event types can provide insights into the types of severe weather phenomena that are most frequently recorded in the dataset.
+
+Overall, these visualizations offer a preliminary understanding of storm patterns, durations, and event types, which can be used as a basis for more in-depth analyses and decision-making in disaster management, risk assessment, and climate research.
+
+### Future Scopes
+
+The dataset can be combined with other data sets to measure correlations between increased severity of storms and related parameters to measure air pollution. The pollution parameters selected can be an increase in Air Pollution or rising carbon emissions for instance.
+

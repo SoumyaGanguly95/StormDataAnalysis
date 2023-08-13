@@ -1,0 +1,97 @@
+---
+title: "GuideToWorkWithMergedDatasets"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{GuideToWorkWithMergedDatasets}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(StormDataAnalysis)
+```
+
+
+```{R}
+# Load CSV data using the custom function
+first_data_file <- "Storms_2019.csv"  # Change this to the actual CSV file name
+first_dataset_loaded <- load_csv_from_package(file_name = first_data_file)
+
+# Display the first few rows of the loaded data
+head(first_dataset_loaded)
+
+```
+
+
+```{R}
+# Load CSV data using the custom function
+second_data_file <- "Storms_2020.csv"  # Change this to the actual CSV file name
+second_dataset_loaded <- load_csv_from_package(file_name = second_data_file)
+
+# Display the first few rows of the loaded data
+head(second_dataset_loaded)
+
+```
+```{R}
+first_dataset_cleaned <- clean_data(first_dataset_loaded)
+second_dataset_cleaned <- clean_data(second_dataset_loaded)
+
+```
+
+
+```{R}
+
+first_dataset_enhanced <- add_new_feature(first_dataset_cleaned)
+second_dataset_enhanced <- add_new_feature(second_dataset_cleaned)
+
+```
+
+```{R}
+merged_data <- merge_cleaned_datasets(first_dataset_enhanced, second_dataset_enhanced)
+eda_results_for_merged_data <- explore_storm_data(merged_data)
+print(eda_results_for_merged_data)
+```
+
+```{R}
+# Import necessary packages
+library(ggplot2)
+
+# Bar Plot of Storm Counts by Category
+bar_plot_counts <- ggplot(eda_results_for_merged_data$storm_counts, aes(x = magnitude_type, y = n)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Storm Counts by Category", x = "Magnitude Type", y = "Count")
+print(bar_plot_counts)
+
+
+```
+
+
+```{R}
+# Import necessary packages
+library(ggplot2)
+
+# Bar Plot of Storm Counts by Category
+bar_plot_counts <- ggplot(eda_results_for_merged_data$storm_counts, aes(x = magnitude_type, y = n)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Storm Counts by Category", x = "Magnitude Type", y = "Count")
+print(bar_plot_counts)
+
+
+```
+
+```{R}
+# Bar Plot of Event Type Counts
+bar_plot_event_types <- ggplot(eda_results_for_merged_data$event_type_counts, aes(x = event_type, y = n)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Event Type Counts", x = "Event Type", y = "Count") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+print(bar_plot_event_types)
+
+```

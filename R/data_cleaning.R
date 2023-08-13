@@ -36,10 +36,10 @@ clean_data <- function(data) {
   # Check the specified columns for valid entries
   valid_entries <- data %>%
     dplyr::filter(
-      not_missing(tor_f_scale) &
-        not_missing(tor_length) &
-        not_missing(tor_width) &
-        not_missing(tor_other_wfo)
+      not_missing(data$tor_f_scale) &
+        not_missing(data$tor_length) &
+        not_missing(data$tor_width) &
+        not_missing(data$tor_other_wfo)
     )
 
   total_rows <- nrow(data)
