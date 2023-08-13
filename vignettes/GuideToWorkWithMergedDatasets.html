@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>GuideToWorkWithMergedDatasets</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">GuideToWorkWithMergedDatasets</h1>
+
+
+
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<p>In the first vignette, “GuideToStormDataAnalysis” we walked through
+the process from data loading to analysis and visualizing the results.
+But in order to fulfill the research objective adding dataset fusion
+capabilities to the package is quite in the trend. In the following
+vignette, we will walk through the process of using the package
+functionalities to Load, Clean and Merge/Fuse the storm datasets from
+two different years. Followed by the data fusion; we will learn how to
+perform exploratory data analysis on the fused datasets and gain
+valuable insights.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(StormDataAnalysis)</span></code></pre></div>
+</div>
+<div id="the-following-code-snippet-illustrates-how-to-load-storm-data-from-two-successive-years." class="section level3">
+<h3>The following code snippet illustrates how to load storm data from
+two successive years.</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Load CSV data using the custom function</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>first_data_file <span class="ot">&lt;-</span> <span class="st">&quot;Storms_2019.csv&quot;</span>  <span class="co"># Change this to the actual CSV file name</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>first_dataset_loaded <span class="ot">&lt;-</span> <span class="fu">load_csv_from_package</span>(<span class="at">file_name =</span> first_data_file)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co"># Display the first few rows of the loaded data</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">head</span>(first_dataset_loaded)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt;   episode_id event_id      state state_fips_code event_type cz_type</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; 1     132325   792172 New mexico              35 heavy snow       Z</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; 2     132325   792178 New mexico              35 heavy snow       Z</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; 3     132325   792690 New mexico              35 heavy snow       Z</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; 4     132325   792061 New mexico              35 heavy snow       Z</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; 5     132325   792183 New mexico              35 heavy snow       Z</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt; 6     132325   792687 New mexico              35 heavy snow       Z</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt;   cz_fips_code                  cz_name wfo    event_begin_time event_timezone</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="co">#&gt; 1          507   WEST CENTRAL HIGHLANDS ABQ 2019-01-01 00:00:00          MST-7</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="co">#&gt; 2          508      SOUTHWEST MOUNTAINS ABQ 2019-01-01 00:00:00          MST-7</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="co">#&gt; 3          519   ALBUQUERQUE METRO AREA ABQ 2019-01-01 00:00:00          MST-7</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="co">#&gt; 4          503  FAR NORTHWEST HIGHLANDS ABQ 2019-01-01 00:00:00          MST-7</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="co">#&gt; 5          510       SAN JUAN MOUNTAINS ABQ 2019-01-01 00:00:00          MST-7</span></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a><span class="co">#&gt; 6          521 SANDIA/MANZANO MOUNTAINS ABQ 2019-01-01 00:00:00          MST-7</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a><span class="co">#&gt;        event_end_time injuries_direct injuries_indirect deaths_direct</span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a><span class="co">#&gt; 1 2019-01-02 02:00:00               0                 0             0</span></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a><span class="co">#&gt; 2 2019-01-02 17:00:00               0                 0             0</span></span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="co">#&gt; 3 2019-01-02 00:00:00               0                66             0</span></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="co">#&gt; 4 2019-01-02 06:00:00               0                 0             0</span></span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="co">#&gt; 5 2019-01-02 00:00:00               0                 0             0</span></span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a><span class="co">#&gt; 6 2019-01-01 23:00:00               0                 0             0</span></span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a><span class="co">#&gt;   deaths_indirect damage_property damage_crops          source magnitude</span></span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a><span class="co">#&gt; 1               0               0            0          Public        NA</span></span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a><span class="co">#&gt; 2               0               0            0 Trained Spotter        NA</span></span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a><span class="co">#&gt; 3               1          500000            0        CoCoRaHS        NA</span></span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a><span class="co">#&gt; 4               0               0            0    Social Media        NA</span></span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a><span class="co">#&gt; 5               0               0            0   COOP Observer        NA</span></span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a><span class="co">#&gt; 6               0               0            0        CoCoRaHS        NA</span></span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a><span class="co">#&gt;   magnitude_type flood_cause tor_f_scale tor_length tor_width tor_other_wfo</span></span>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a><span class="co">#&gt; 1                                                NA         0              </span></span>
+<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a><span class="co">#&gt; 2                                                NA         0              </span></span>
+<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a><span class="co">#&gt; 3                                                NA         0              </span></span>
+<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a><span class="co">#&gt; 4                                                NA         0              </span></span>
+<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a><span class="co">#&gt; 5                                                NA         0              </span></span>
+<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a><span class="co">#&gt; 6                                                NA         0              </span></span>
+<span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a><span class="co">#&gt;   location_index event_range event_azimuth reference_location event_latitude</span></span>
+<span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a><span class="co">#&gt; 1             NA          NA                                              NA</span></span>
+<span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a><span class="co">#&gt; 2             NA          NA                                              NA</span></span>
+<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a><span class="co">#&gt; 3             NA          NA                                              NA</span></span>
+<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a><span class="co">#&gt; 4             NA          NA                                              NA</span></span>
+<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a><span class="co">#&gt; 5             NA          NA                                              NA</span></span>
+<span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a><span class="co">#&gt; 6             NA          NA                                              NA</span></span>
+<span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a><span class="co">#&gt;   event_longitude event_point</span></span>
+<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a><span class="co">#&gt; 1              NA            </span></span>
+<span id="cb2-51"><a href="#cb2-51" tabindex="-1"></a><span class="co">#&gt; 2              NA            </span></span>
+<span id="cb2-52"><a href="#cb2-52" tabindex="-1"></a><span class="co">#&gt; 3              NA            </span></span>
+<span id="cb2-53"><a href="#cb2-53" tabindex="-1"></a><span class="co">#&gt; 4              NA            </span></span>
+<span id="cb2-54"><a href="#cb2-54" tabindex="-1"></a><span class="co">#&gt; 5              NA            </span></span>
+<span id="cb2-55"><a href="#cb2-55" tabindex="-1"></a><span class="co">#&gt; 6              NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Load CSV data using the custom function</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>second_data_file <span class="ot">&lt;-</span> <span class="st">&quot;Storms_2020.csv&quot;</span>  <span class="co"># Change this to the actual CSV file name</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>second_dataset_loaded <span class="ot">&lt;-</span> <span class="fu">load_csv_from_package</span>(<span class="at">file_name =</span> second_data_file)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co"># Display the first few rows of the loaded data</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="fu">head</span>(second_dataset_loaded)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt;   episode_id event_id    state state_fips_code event_type cz_type cz_fips_code</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; 1     143960   865452 Oklahoma              40       hail       C          143</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; 2     143960   865453 Oklahoma              40       hail       C          143</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; 3     143960   865454 Oklahoma              40       hail       C          143</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; 4     143960   865455 Oklahoma              40       hail       C           21</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; 5     143993   865712    Texas              48       hail       C          209</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; 6     143993   865735    Texas              48       hail       C           29</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt;    cz_name wfo    event_begin_time event_timezone      event_end_time</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; 1    TULSA TSA 2020-01-10 11:35:00          CST-6 2020-01-10 11:35:00</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt; 2    TULSA TSA 2020-01-10 11:36:00          CST-6 2020-01-10 11:36:00</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; 3    TULSA TSA 2020-01-10 11:38:00          CST-6 2020-01-10 11:38:00</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt; 4 CHEROKEE TSA 2020-01-10 15:02:00          CST-6 2020-01-10 15:02:00</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt; 5     HAYS EWX 2020-01-10 19:40:00          CST-6 2020-01-10 19:40:00</span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt; 6    BEXAR EWX 2020-01-10 19:54:00          CST-6 2020-01-10 19:54:00</span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt;   injuries_direct injuries_indirect deaths_direct deaths_indirect</span></span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt; 1               0                 0             0               0</span></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co">#&gt; 2               0                 0             0               0</span></span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt; 3               0                 0             0               0</span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="co">#&gt; 4               0                 0             0               0</span></span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="co">#&gt; 5               0                 0             0               0</span></span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a><span class="co">#&gt; 6               0                 0             0               0</span></span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a><span class="co">#&gt;   damage_property damage_crops            source magnitude magnitude_type</span></span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a><span class="co">#&gt; 1               0            0   Broadcast Media      1.00               </span></span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a><span class="co">#&gt; 2               0            0 Emergency Manager      1.00               </span></span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a><span class="co">#&gt; 3               0            0            Public      0.75               </span></span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a><span class="co">#&gt; 4           15000            0     Amateur Radio      1.75               </span></span>
+<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a><span class="co">#&gt; 5               0            0            Public      0.75               </span></span>
+<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a><span class="co">#&gt; 6               0            0            Public      1.00               </span></span>
+<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a><span class="co">#&gt;   flood_cause tor_f_scale tor_length tor_width tor_other_wfo location_index</span></span>
+<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a><span class="co">#&gt; 1                                 NA         0                            1</span></span>
+<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a><span class="co">#&gt; 2                                 NA         0                            1</span></span>
+<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a><span class="co">#&gt; 3                                 NA         0                            1</span></span>
+<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a><span class="co">#&gt; 4                                 NA         0                            1</span></span>
+<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a><span class="co">#&gt; 5                                 NA         0                            1</span></span>
+<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a><span class="co">#&gt; 6                                 NA         0                            1</span></span>
+<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a><span class="co">#&gt;   event_range event_azimuth   reference_location event_latitude event_longitude</span></span>
+<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a><span class="co">#&gt; 1        0.24           ENE                TULSA        36.1514        -95.9460</span></span>
+<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a><span class="co">#&gt; 2        2.95           NNE TULSA R L JONES ARPT        36.0690        -95.9585</span></span>
+<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a><span class="co">#&gt; 3        2.00             N                TULSA        36.1790        -95.9500</span></span>
+<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a><span class="co">#&gt; 4        0.65             S            TAHLEQUAH        35.9106        -94.9710</span></span>
+<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a><span class="co">#&gt; 5        5.01           ENE                HENLY        30.2400        -98.1500</span></span>
+<span id="cb3-48"><a href="#cb3-48" tabindex="-1"></a><span class="co">#&gt; 6        5.56             N              WETMORE        29.6500        -98.4300</span></span>
+<span id="cb3-49"><a href="#cb3-49" tabindex="-1"></a><span class="co">#&gt;              event_point</span></span>
+<span id="cb3-50"><a href="#cb3-50" tabindex="-1"></a><span class="co">#&gt; 1 POINT(-95.946 36.1514)</span></span>
+<span id="cb3-51"><a href="#cb3-51" tabindex="-1"></a><span class="co">#&gt; 2 POINT(-95.9585 36.069)</span></span>
+<span id="cb3-52"><a href="#cb3-52" tabindex="-1"></a><span class="co">#&gt; 3   POINT(-95.95 36.179)</span></span>
+<span id="cb3-53"><a href="#cb3-53" tabindex="-1"></a><span class="co">#&gt; 4 POINT(-94.971 35.9106)</span></span>
+<span id="cb3-54"><a href="#cb3-54" tabindex="-1"></a><span class="co">#&gt; 5    POINT(-98.15 30.24)</span></span>
+<span id="cb3-55"><a href="#cb3-55" tabindex="-1"></a><span class="co">#&gt; 6    POINT(-98.43 29.65)</span></span></code></pre></div>
+</div>
+<div id="followed-by-loading-this-particular-code-snippet-explains-how-to-use-the-clean_data-function-and-perform-data-cleaning." class="section level3">
+<h3>Followed by loading , this particular code snippet explains how to
+use the clean_data function and perform data cleaning.</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>first_dataset_cleaned <span class="ot">&lt;-</span> <span class="fu">clean_data</span>(first_dataset_loaded)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>second_dataset_cleaned <span class="ot">&lt;-</span> <span class="fu">clean_data</span>(second_dataset_loaded)</span></code></pre></div>
+</div>
+<div id="similar-to-previous-illustration-in-the-vignette-guidetostormdataanalysis-in-this-particular-vignette-user-enhances-the-data-with-new-features." class="section level3">
+<h3>Similar to previous illustration in the vignette
+“GuideToStormDataAnalysis”, in this particular vignette user enhances
+the data with new features.</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>first_dataset_enhanced <span class="ot">&lt;-</span> <span class="fu">add_new_feature</span>(first_dataset_cleaned)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>second_dataset_enhanced <span class="ot">&lt;-</span> <span class="fu">add_new_feature</span>(second_dataset_cleaned)</span></code></pre></div>
+</div>
+<div id="data-fusion-step." class="section level3">
+<h3>Data Fusion step.</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>merged_data <span class="ot">&lt;-</span> <span class="fu">merge_cleaned_datasets</span>(first_dataset_enhanced, second_dataset_enhanced)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>eda_results_for_merged_data <span class="ot">&lt;-</span> <span class="fu">explore_storm_data</span>(merged_data)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">print</span>(eda_results_for_merged_data)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; $storm_counts</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt;   magnitude_type     n</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; 1           High  1143</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; 2            Low  3037</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; 3       Moderate 11089</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; 4         Severe 46029</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; $duration_comparison</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 × 3</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt;   magnitude_type mean_duration_of_storm mean_storm_duration_in_hours</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;          &lt;drtn&gt;                 &lt;drtn&gt;                      </span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; 1 High            1.928259 mins         0.0005356275 mins           </span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt; 2 Low             1.244979 mins         0.0003458274 mins           </span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt; 3 Moderate        3.899089 mins         0.0010830803 mins           </span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt; 4 Severe         62.579326 mins         0.0173831461 mins           </span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt; $event_type_counts</span></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt;                 event_type     n</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt; 1                     hail 15406</span></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt; 2                high wind  5838</span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="co">#&gt; 3              marine hail    43</span></span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="co">#&gt; 4         marine high wind   111</span></span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a><span class="co">#&gt; 5       marine strong wind    20</span></span>
+<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a><span class="co">#&gt; 6 marine thunderstorm wind  4470</span></span>
+<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a><span class="co">#&gt; 7              strong wind  2332</span></span>
+<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a><span class="co">#&gt; 8        thunderstorm wind 33078</span></span></code></pre></div>
+</div>
+<div id="visualzing-the-exploratory-data-analysis-results-with-plot-visualizations." class="section level3">
+<h3>Visualzing the Exploratory Data Analysis results with plot
+visualizations.</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Import necessary packages</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co"># Bar Plot of Storm Counts by Category</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>bar_plot_counts <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(eda_results_for_merged_data<span class="sc">$</span>storm_counts, <span class="fu">aes</span>(<span class="at">x =</span> magnitude_type, <span class="at">y =</span> n)) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Storm Counts by Category&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Magnitude Type&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Count&quot;</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="fu">print</span>(bar_plot_counts)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Import necessary packages</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co"># Bar Plot of Storm Counts by Category</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>bar_plot_counts <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(eda_results_for_merged_data<span class="sc">$</span>storm_counts, <span class="fu">aes</span>(<span class="at">x =</span> magnitude_type, <span class="at">y =</span> n)) <span class="sc">+</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Storm Counts by Category&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Magnitude Type&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Count&quot;</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="fu">print</span>(bar_plot_counts)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># Bar Plot of Event Type Counts</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>bar_plot_event_types <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(eda_results_for_merged_data<span class="sc">$</span>event_type_counts, <span class="fu">aes</span>(<span class="at">x =</span> event_type, <span class="at">y =</span> n)) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Event Type Counts&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Event Type&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Count&quot;</span>) <span class="sc">+</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="fu">print</span>(bar_plot_event_types)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="conclusions-and-future-scopes" class="section level3">
+<h3>Conclusions and Future Scopes</h3>
+<p>Adding value to the previous illustration in the vignette,
+GuideToStormDataAnalysis, these visualizations offer a preliminary
+understanding of storm patterns, durations, and event types, for two
+successive years. This can be used as a basis for more in-depth analysis
+and decision-making in disaster management, risk assessment, and climate
+research. Fusing data for more number of consecutive years can also help
+researchers understand the change in data trend over the years.</p>
+<p>This study when combined with air pollution dataset, can helps
+researchers understand the effect of pollution on increased number of
+storms and also storm intensity. Clear understanding of the cause and
+the effect will help research groups to take suitable measures and also
+predict the occurence of such events in the future.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

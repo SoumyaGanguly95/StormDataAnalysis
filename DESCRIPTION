@@ -1,10 +1,11 @@
 Package: StormDataAnalysis
-Title: What the Package Does (One Line, Title Case)
+Title: Exploratory Data Analysis of Storm Data and Fused Storm Data
 Version: 0.0.0.9000
 Authors@R: 
     person("Soumya", "Ganguly", , "soumyaganguly95@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Description: The following R package, StormDataAnalysis is a Data Analysis 
+  package which is built to work with Storm Datasets. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
