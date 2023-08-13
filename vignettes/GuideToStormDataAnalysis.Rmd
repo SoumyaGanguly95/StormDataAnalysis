@@ -15,9 +15,11 @@ knitr::opts_chunk$set(
 ```
 
 ### Introduction
+
 The following R package, StormDataAnalysis is a Data Analysis package which is built to work with Storm Datasets.  
 
 ### Motivation
+
 1. Studying storm patterns and characteristics can help communities and organizations better prepare for and respond to severe weather events. By understanding historical data, trends, and intensities, it becomes possible to develop more effective disaster preparedness plans.
 
 2. Analyzing storm data aids in assessing risks associated with various storm types. Businesses, insurance companies, and government agencies can use this information to make more accurate risk assessments, set insurance rates, and allocate resources for emergency response.
@@ -110,6 +112,8 @@ print(eda_results)
 
 To analyze the results obtained from Exploratory Data Analysis stage, let us plot the results. Visualizing the data analysis with graphs and plots helps in drawing valuable insights from the data. 
 
+For result analysis, we are considering ggplot2 library along with our StormDataAnalysis Package. The plots helps the user visualize the data trends with better clarity.
+
 ```{R}
 # Import necessary packages
 library(ggplot2)
@@ -162,7 +166,7 @@ The plots provide valuable insights to EDA results.
 
 - Event Type Counts: The bar plot showing event type counts gives an overview of the frequency of different types of events recorded. This can help in identifying which types of events are more frequent and might have a significant impact on the analysis.
 
-- Based on these visualizations, you can make the following observations or conclusions:
+Based on these visualizations, you can make the following observations or conclusions:
 
 - Certain storm categories might be more common or prevalent compared to others, indicating potential areas of focus for disaster preparedness and response.
 

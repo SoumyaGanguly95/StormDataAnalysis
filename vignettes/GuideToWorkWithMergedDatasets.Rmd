@@ -6,6 +6,9 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+### Introduction
+
+In the first vignette, "GuideToStormDataAnalysis" we walked through the process from data loading to analysis and visualizing the results. But in order to fulfill the research objective adding dataset fusion capabilities to the package is quite in the trend. In the following vignette, we will walk through the process of using the package functionalities to Load, Clean and Merge/Fuse the storm datasets from two different years. Followed by the data fusion; we will learn how to perform exploratory data analysis on the fused datasets and gain valuable insights.
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -18,6 +21,7 @@ knitr::opts_chunk$set(
 library(StormDataAnalysis)
 ```
 
+### The following code snippet illustrates how to load storm data from two successive years.
 
 ```{R}
 # Load CSV data using the custom function
@@ -39,12 +43,17 @@ second_dataset_loaded <- load_csv_from_package(file_name = second_data_file)
 head(second_dataset_loaded)
 
 ```
+
+
+### Followed by loading , this particular code snippet explains how to use the clean_data function and perform data cleaning. 
+
 ```{R}
 first_dataset_cleaned <- clean_data(first_dataset_loaded)
 second_dataset_cleaned <- clean_data(second_dataset_loaded)
 
 ```
 
+### Similar to previous illustration in the vignette "GuideToStormDataAnalysis", in this particular vignette user enhances the data with new features.
 
 ```{R}
 
@@ -53,11 +62,15 @@ second_dataset_enhanced <- add_new_feature(second_dataset_cleaned)
 
 ```
 
+### Data Fusion step. 
+
 ```{R}
 merged_data <- merge_cleaned_datasets(first_dataset_enhanced, second_dataset_enhanced)
 eda_results_for_merged_data <- explore_storm_data(merged_data)
 print(eda_results_for_merged_data)
 ```
+
+### Visualzing the Exploratory Data Analysis results with plot visualizations.
 
 ```{R}
 # Import necessary packages
@@ -95,3 +108,9 @@ bar_plot_event_types <- ggplot(eda_results_for_merged_data$event_type_counts, ae
 print(bar_plot_event_types)
 
 ```
+
+### Conclusions and Future Scopes
+
+Adding value to the previous illustration in the vignette, GuideToStormDataAnalysis, these visualizations offer a preliminary understanding of storm patterns, durations, and event types, for two successive years. This can be used as a basis for more in-depth analysis and decision-making in disaster management, risk assessment, and climate research. Fusing data for more number of consecutive years can also help researchers understand the change in data trend over the years. 
+
+This study when combined with air pollution dataset, can helps researchers understand the effect of pollution on increased number of storms and also storm intensity. Clear understanding of the cause and the effect will help research groups to take suitable measures and also predict the occurence of such events in the future.
